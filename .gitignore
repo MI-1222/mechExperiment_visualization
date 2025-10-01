@@ -1,0 +1,8 @@
+.DS_Store
+.env
+selfDocs/
+node_modules/
+.vscode/
+
+
+~$*
