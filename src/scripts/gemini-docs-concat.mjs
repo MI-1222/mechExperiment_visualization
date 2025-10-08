@@ -35,7 +35,7 @@ function mergeMdFiles(inputDir, outputFile) {
 
   try {
     // 1. mdファイルのリストを取得
-    let mdFilePaths = findMdFiles(inputDir).reverse();
+    let mdFilePaths = findMdFiles(inputDir).sort();
     // 配列の先頭にREADME.mdを追加
     mdFilePaths.unshift('README.md');
 
