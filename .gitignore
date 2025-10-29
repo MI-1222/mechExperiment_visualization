@@ -3,6 +3,18 @@
 selfDocs/
 node_modules/
 .vscode/
+# python 中間ファイル
+*__pycache__/
 
-
+# office中間ファイル
 ~$*
+
+# 仮想環境
+.venv/
+
+# 動画ファイル(google drive からダウンロードする)
+# https://drive.google.com/drive/folders/1Avx0-0aRe4xkkKeQNGTP5eEGAL-wHdgi?usp=drive_link
+figure/video/
+
+# 出力ファイル
+output/

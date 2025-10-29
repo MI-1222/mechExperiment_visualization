@@ -1,0 +1,99 @@
+{
+  // このJSONファイルは、PIV解析と動画生成のパイプライン実行パラメータを管理する。
+  // main.py から読み込まれる。
+
+  // デフォルトの実行設定
+  "default_execution": {
+    // --config オプションが指定されない場合に実行される設定キー
+    "execution_key": "test06",
+    // 個別の execution 設定に execution_function がない場合、この設定が適用される。
+    "execution_function": {
+      "piv_analysis": true, // PIV解析を実行するかどうか
+      "create_video": true  // 動画生成を実行するかどうか
+    }
+  },
+
+  // 個別の実行設定リスト
+  "executions": {
+    "test02": {
+      "piv_analysis": {
+        "video_path": "figure/video/test/test02_05.mp4",
+        "output_dir": "output/mp4_tmp/test02",
+        "scaling_factor": 1.0,
+        "vmax": 800,
+        "frame_comparison_step": 2
+      },
+      "create_video": {
+        "output_dir": "output/video",
+        "fps": 15,
+        "name": "test02_video01.mp4"
+      }
+    },
+    "test03": {
+      // PIV解析 (piv_analysis.py) のパラメータ
+      "piv_analysis": {
+        "video_path": "figure/video/test/test03.mp4", // 解析対象の動画ファイルパス (プロジェクトルートからの相対パス)
+        "output_dir": "output/mp4_tmp/test03", // 解析結果の画像シーケンスを保存するディレクトリ
+        "scaling_factor": 1.0, // スケーリング係数 (pixels/mm など)
+        "vmax": 800, // カラーマップの最大速度。固定値を指定する。
+        "frame_comparison_step": 1
+      },
+      // 動画生成 (create_video.py) のパラメータ
+      "create_video": {
+        // input_dir は piv_analysis.output_dir が自動的に使用されるため、ここでは指定不要。
+        "output_dir": "output/video", // 完成した動画を保存するディレクトリ
+        "fps": 30, // 動画のフレームレート
+        "name": "test03_02.mp4" // 出力する動画のファイル名
+      }
+    },
+    "test04": {
+      "piv_analysis": {
+        "video_path": "figure/video/test/test04.mp4",
+        "output_dir": "output/mp4_tmp/test04",
+        "scaling_factor": 1.0,
+        // `"vmax": null`を指定すると、動画全体の最大速度から自動でスケールが決定される
+        "vmax": 500,
+        "frame_comparison_step": 1
+      },
+      "create_video": {
+        "output_dir": "output/video",
+        "fps": 30,
+        "name": "test04_04.mp4"
+      }
+    },
+    "test05": {
+      "piv_analysis": {
+        "video_path": "figure/video/test/test05.mp4",
+        "output_dir": "output/mp4_tmp/test05",
+        "scaling_factor": 1.0,
+        // `"vmax": null`を指定すると、動画全体の最大速度から自動でスケールが決定される
+        "vmax": null,
+        "frame_comparison_step": 1,
+        "moving_average_window": 5,
+        "averaging_method": "median"
+      },
+      "create_video": {
+        "output_dir": "output/video",
+        "fps": 30,
+        "name": "test05_04.mp4"
+      }
+    },
+    "test06": {
+      "piv_analysis": {
+        "video_path": "figure/video/test/test06_02.mp4",
+        "output_dir": "output/mp4_tmp/test06",
+        "scaling_factor": 1.0,
+        // `"vmax": null`を指定すると、動画全体の最大速度から自動でスケールが決定される
+        "vmax": 1000,
+        "frame_comparison_step": 2,
+        "moving_average_window": 8,
+        "averaging_method": "median"
+      },
+      "create_video": {
+        "output_dir": "output/video",
+        "fps": 60,
+        "name": "test06_02.mp4"
+      }
+    }
+  }
+}
