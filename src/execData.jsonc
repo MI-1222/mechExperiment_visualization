@@ -5,7 +5,7 @@
   // デフォルトの実行設定
   "default_execution": {
     // --config オプションが指定されない場合に実行される設定キー
-    "execution_key": "test06",
+    "execution_key": "piv_demo",
     // 個別の execution 設定に execution_function がない場合、この設定が適用される。
     "execution_function": {
       "piv_analysis": true, // PIV解析を実行するかどうか
@@ -15,6 +15,23 @@
 
   // 個別の実行設定リスト
   "executions": {
+    "piv_demo": {
+      "piv_analysis": {
+        "video_path": "demo/piv_demo/piv_demo_input.mp4",
+        "output_dir": "demo/piv_demo/mp4_tmp01",
+        "scaling_factor": 1.0,
+        // `"vmax": null`を指定すると、動画全体の最大速度から自動でスケールが決定される
+        "vmax": null,
+        "frame_comparison_step": 1,
+        "moving_average_window": 5,
+        "averaging_method": "median"
+      },
+      "create_video": {
+        "output_dir": "demo/piv_demo",
+        "fps": 30,
+        "name": "piv_demo_output01.mp4"
+      }
+    },
     "test02": {
       "piv_analysis": {
         "video_path": "figure/video/test/test02_05.mp4",
