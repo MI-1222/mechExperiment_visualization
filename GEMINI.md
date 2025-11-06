@@ -28,23 +28,14 @@
 最終的には、最終成果物(試作品など)・プレゼンテーション資料・報告書等に取りまとめる。
 
 ### 授業日程
-[`docs/schedule.md`](docs/schedule.md) 参照
+`docs/schedule.md` 参照
 
-## メンバー
-### 学生
-計5名
-* 高橋 健斗
-* 伊理 正広
-* 小針 惇基
-* 竹内 俊作
-* 麦田 康介
-* 川口 航輝
 
 ## 目次
 |ファイル|概要|
 |:--|:--|
-|[`docs/schedule.md`](docs/schedule.md)|授業日程・スケジュール|
-|[`docs/meeting.md`](docs/meeting.md)|会議の議事録|
+|`docs/schedule.md`|授業日程・スケジュール|
+|`docs/meeting.md`|会議の議事録|
 
 ---
 
@@ -59,10 +50,10 @@
 ## 目次
 |ファイル|概要|
 |:--|:--|
-|[`docs/meeting/meeting20251001.md`](docs/meeting/meeting20251001.md)|第1回会議の議事録|
-|[`docs/meeting/meeting20251007.md`](docs/meeting/meeting20251007.md)|第2回会議の議事録|
-|[`docs/meeting/meeting20251008.md`](docs/meeting/meeting20251008.md)|第3回会議の議事録|
-|[`docs/meeting/meeting20251014.md`](docs/meeting/meeting20251014.md)|第4回会議の議事録|
+|`docs/meeting/meeting20251001.md`|第1回会議の議事録|
+|`docs/meeting/meeting20251007.md`|第2回会議の議事録|
+|`docs/meeting/meeting20251008.md`|第3回会議の議事録|
+|`docs/meeting/meeting20251014.md`|第4回会議の議事録|
 
 ---
 
@@ -194,10 +185,10 @@
 
 #### 設計図について
 * トンネルについて
-  * ![トンネル(伊理)](/figure/blueprint/blueprint_iri02.jpeg)
+  * ![トンネル](/figure/blueprint/blueprint_iri02.jpeg)
 * ホームの設計図
-  * ![ホーム(伊理)](/figure/blueprint/blueprint_iri01.jpeg)
-  * ![ホーム(竹内)](/figure/blueprint/blueprint_take01.jpeg)
+  * ![ホーム](/figure/blueprint/blueprint_iri01.jpeg)
+  * ![ホーム](/figure/blueprint/blueprint_take01.jpeg)
 
 
 #### 板の切断について
