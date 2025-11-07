@@ -17,33 +17,76 @@
   "executions": {
     "piv_demo": {
       "piv_analysis": {
+        // 解析対象の動画パス。プロジェクトルートからの相対パスで指定。
         "video_path": "demo/piv_demo/piv_demo_input.mp4",
-        "output_dir": "demo/piv_demo/mp4_tmp01",
+        // 解析結果の画像シーケンスを出力するディレクトリ。
+        "output_dir": "output/demo/mp4_tmp01",
+        // スケーリング係数 (pixel/mm)。物理単位での速度を計算するために使用。1.0ならピクセル単位。
         "scaling_factor": 1.0,
-        // `"vmax": null`を指定すると、動画全体の最大速度から自動でスケールが決定される
+        // カラーマップの最大速度。nullで自動調整。値を小さくすると低速域の差が見やすいが、速い流れは飽和する。
         "vmax": null,
+        // フレーム比較の間隔。値を大きくすると低速な流れを捉えやすいが、時間分解能は低下し、速い流れは追跡失敗しやすくなる。
         "frame_comparison_step": 1,
-        "moving_average_window": 5,
-        "averaging_method": "median"
+        // 時間方向の移動平均窓サイズ。値を大きくするとノイズが減り滑らかになるが、急な変化は鈍る。
+        "moving_average_window": 2,
+        // 移動平均の計算方法。'median' or 'mean'
+        "averaging_method": "median",
+        "piv_parameters": {
+          // 検査窓サイズ。大きくするとノイズに強いが空間分解能は低下。小さくすると微細な渦が見えるがノイズに弱い。
+          "winsize": 32,
+          // 探索窓サイズ。winsizeより大きい必要あり。大きくすると速い流れに追従できるが計算コスト増。
+          "searchsize": 64,
+          // 検査窓の重なり。大きくするとベクトルが密になり空間分解能が上がるが計算コスト増。
+          "overlap": 16
+        }
       },
       "create_video": {
-        "output_dir": "demo/piv_demo",
+        "output_dir": "output/demo",
         "fps": 30,
         "name": "piv_demo_output01.mp4"
       }
     },
     "test02": {
       "piv_analysis": {
-        "video_path": "figure/video/test/test02_05.mp4",
+        "video_path": "figure/video/test/test02_04.mp4",
         "output_dir": "output/mp4_tmp/test02",
         "scaling_factor": 1.0,
-        "vmax": 800,
+        "vmax": null,
         "frame_comparison_step": 2
       },
       "create_video": {
         "output_dir": "output/video",
-        "fps": 15,
+        "fps": 60,
         "name": "test02_video01.mp4"
+      }
+    },
+    "test02_04": {
+      "piv_analysis": {
+        "video_path": "figure/video/test/test02_04.mp4",
+        "output_dir": "output/mp4_tmp/test02",
+        "scaling_factor": 1.0,
+        // `"vmax": null`を指定すると、動画全体の最大速度から自動でスケールが決定される
+        "vmax": null,
+        "frame_comparison_step": 1,
+        "moving_average_window": 10,
+        "averaging_method": "median",
+        "piv_parameters": {
+          // 検査窓サイズ。小さくすると空間分解能が上がるがノイズに弱くなる。高精度化のため16に設定。
+          "winsize": 4,
+          // 探索窓サイズ。winsizeの2倍程度が一般的。高精度化のため32に設定。
+          "searchsize": 8,
+          // 検査窓の重なり。winsizeの75%に設定し、ベクトル密度を向上。
+          "overlap": 3,
+          // S/N比のしきい値。信頼性の低いベクトルを除去する。高精度化のため1.3に設定。
+          "sn_threshold": 1.3,
+          // 外れ値のしきい値。周囲から大きく外れたベクトルを除去する。高精度化のため2.0に設定。
+          "std_threshold": 2.0
+        }
+      },
+      "create_video": {
+        "output_dir": "output/video03",
+        "fps": 60,
+        "name": "test02_video03.mp4"
       }
     },
     "test03": {
@@ -69,18 +112,32 @@
         "output_dir": "output/mp4_tmp/test04",
         "scaling_factor": 1.0,
         // `"vmax": null`を指定すると、動画全体の最大速度から自動でスケールが決定される
-        "vmax": 500,
-        "frame_comparison_step": 1
+        "vmax": null,
+        "frame_comparison_step": 1,
+        "moving_average_window": 5,
+        "averaging_method": "median",
+        "piv_parameters": {
+          // 検査窓サイズ。小さくすると空間分解能が上がるがノイズに弱くなる。高精度化のため16に設定。
+          "winsize": 16,
+          // 探索窓サイズ。winsizeの2倍程度が一般的。高精度化のため32に設定。
+          "searchsize": 32,
+          // 検査窓の重なり。winsizeの75%に設定し、ベクトル密度を向上。
+          "overlap": 12,
+          // S/N比のしきい値。信頼性の低いベクトルを除去する。高精度化のため1.3に設定。
+          "sn_threshold": 1.3,
+          // 外れ値のしきい値。周囲から大きく外れたベクトルを除去する。高精度化のため2.0に設定。
+          "std_threshold": 2.0
+        }
       },
       "create_video": {
         "output_dir": "output/video",
-        "fps": 30,
-        "name": "test04_04.mp4"
+        "fps": 60,
+        "name": "test04_02.mp4"
       }
     },
     "test05": {
       "piv_analysis": {
-        "video_path": "figure/video/test/test05.mp4",
+        "video_path": "figure/video/test/test05_01.mp4",
         "output_dir": "output/mp4_tmp/test05",
         "scaling_factor": 1.0,
         // `"vmax": null`を指定すると、動画全体の最大速度から自動でスケールが決定される
@@ -95,21 +152,114 @@
         "name": "test05_04.mp4"
       }
     },
+    "test05_02": {
+      "piv_analysis": {
+        "video_path": "figure/video/test/test05_02.mp4",
+        "output_dir": "output/mp4_tmp/test05",
+        "scaling_factor": 1.0,
+        // `"vmax": null`を指定すると、動画全体の最大速度から自動でスケールが決定される
+        "vmax": null,
+        "frame_comparison_step": 1,
+        "moving_average_window": 10,
+        "averaging_method": "median",
+        "piv_parameters": {
+          // 検査窓サイズ。小さくすると空間分解能が上がるがノイズに弱くなる。高精度化のため16に設定。
+          "winsize": 16,
+          // 探索窓サイズ。winsizeの2倍程度が一般的。高精度化のため32に設定。
+          "searchsize": 32,
+          // 検査窓の重なり。winsizeの75%に設定し、ベクトル密度を向上。
+          "overlap": 12,
+          // S/N比のしきい値。信頼性の低いベクトルを除去する。高精度化のため1.3に設定。
+          "sn_threshold": 1.3,
+          // 外れ値のしきい値。周囲から大きく外れたベクトルを除去する。高精度化のため2.0に設定。
+          "std_threshold": 2.0
+        }
+      },
+      "create_video": {
+        "output_dir": "output/video",
+        "fps": 30,
+        "name": "test05_02_01.mp4"
+      }
+    },
     "test06": {
       "piv_analysis": {
         "video_path": "figure/video/test/test06_02.mp4",
         "output_dir": "output/mp4_tmp/test06",
         "scaling_factor": 1.0,
         // `"vmax": null`を指定すると、動画全体の最大速度から自動でスケールが決定される
-        "vmax": 1000,
+        "vmax": null,
         "frame_comparison_step": 2,
-        "moving_average_window": 8,
-        "averaging_method": "median"
+        "moving_average_window": 10,
+        "averaging_method": "median",
+        "piv_parameters": {
+          // 検査窓サイズ。小さくすると空間分解能が上がるがノイズに弱くなる。高精度化のため16に設定。
+          "winsize": 16,
+          // 探索窓サイズ。winsizeの2倍程度が一般的。高精度化のため32に設定。
+          "searchsize": 32,
+          // 検査窓の重なり。winsizeの75%に設定し、ベクトル密度を向上。
+          "overlap": 12,
+          // S/N比のしきい値。信頼性の低いベクトルを除去する。高精度化のため1.3に設定。
+          "sn_threshold": 1.3,
+          // 外れ値のしきい値。周囲から大きく外れたベクトルを除去する。高精度化のため2.0に設定。
+          "std_threshold": 2.0
+        }
       },
       "create_video": {
         "output_dir": "output/video",
         "fps": 60,
         "name": "test06_02.mp4"
+      }
+    },
+    "test06_03": {
+      "piv_analysis": {
+        "video_path": "figure/video/test/test06_03.mp4",
+        "output_dir": "output/mp4_tmp/test06_03",
+        "scaling_factor": 1.0,
+        // `"vmax": null`を指定すると、動画全体の最大速度から自動でスケールが決定される
+        "vmax": null,
+        "frame_comparison_step": 2,
+        "moving_average_window": 10,
+        "averaging_method": "median",
+        "piv_parameters": {
+          // 検査窓サイズ。小さくすると空間分解能が上がるがノイズに弱くなる。高精度化のため16に設定。
+          "winsize": 16,
+          // 探索窓サイズ。winsizeの2倍程度が一般的。高精度化のため32に設定。
+          "searchsize": 32,
+          // 検査窓の重なり。winsizeの75%に設定し、ベクトル密度を向上。
+          "overlap": 12,
+          // S/N比のしきい値。信頼性の低いベクトルを除去する。高精度化のため1.3に設定。
+          "sn_threshold": 1.3,
+          // 外れ値のしきい値。周囲から大きく外れたベクトルを除去する。高精度化のため2.0に設定。
+          "std_threshold": 2.0
+        }
+      },
+      "create_video": {
+        "output_dir": "output/video",
+        "fps": 60,
+        "name": "test06_03.mp4"
+      }
+    },
+    "piv_20251107_184049": {
+      "piv_analysis": {
+        "video_path": "figure/video/20251028_164632_iri/video01.mp4",
+        "output_dir": "output/piv_20251107_184049/tmp",
+        "scaling_factor": 1.0,
+        "vmax": null,
+        "frame_comparison_step": 2,
+        "moving_average_window": 10,
+        "averaging_method": "median",
+        "piv_parameters": {
+          "winsize": 16,
+          "searchsize": 32,
+          "overlap": 12,
+          "sn_threshold": 1.3,
+          "std_threshold": 2.0
+        }
+      },
+      "create_video": {
+        "output_dir": "output/piv_20251107_184049",
+        "fps": 60,
+        "name": "output.mp4"
       }
     }
   }

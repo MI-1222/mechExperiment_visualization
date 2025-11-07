@@ -105,7 +105,8 @@ def main():
         vmax_override=piv_params.get("vmax"),
         frame_comparison_step=piv_params.get("frame_comparison_step", 1),
         moving_average_window=piv_params.get("moving_average_window", 1),
-        averaging_method=piv_params.get("averaging_method", "mean")
+        averaging_method=piv_params.get("averaging_method", "mean"),
+        piv_params=piv_params.get("piv_parameters", {})
       )
     except KeyError as e:
       print(f"Error: Missing required parameter {e} in 'piv_analysis' for '{config_key}'.")
