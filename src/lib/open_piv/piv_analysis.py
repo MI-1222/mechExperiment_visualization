@@ -24,7 +24,7 @@ except ImportError:
 from openpiv import validation, filters, scaling, tools
 
 
-def analyze_and_save_frames(video_path, output_dir, scaling_factor, vmax_override=None, frame_comparison_step=1, moving_average_window=1, averaging_method="mean"):
+def analyze_and_save_frames(video_path, output_dir, scaling_factor, vmax_override=None, frame_comparison_step=1, moving_average_window=1, averaging_method="mean", piv_params=None):
   """
   煙の動画をPIV解析し、指定されたフレーム間隔ごとの速度場を可視化して画像として保存する関数。
   オプションで、連続するフレームペアの解析結果を移動平均または移動中央値で集計し、滑らかなベクトル場を生成する。
@@ -37,6 +37,7 @@ def analyze_and_save_frames(video_path, output_dir, scaling_factor, vmax_overrid
     frame_comparison_step (int): 比較するフレームの間隔。デフォルトは1。
     moving_average_window (int): 移動集計のウィンドウサイズ。デフォルトは1（集計なし）。
     averaging_method (str): 集計方法（'mean'または'median'）。デフォルトは'mean'。
+    piv_params (dict, optional): OpenPIVに渡すパラメータの辞書。
   """
   # --- 1. 初期設定と準備 ---
   print(f"--- Starting PIV Analysis for '{video_path}' ---")
@@ -56,12 +57,17 @@ def analyze_and_save_frames(video_path, output_dir, scaling_factor, vmax_overrid
     fps = 30.0
   dt = frame_comparison_step / fps
 
-  # PIVパラメータ
-  winsize = 32
-  searchsize = 64
-  overlap = 16
-  sn_threshold = 1.1
-  std_threshold = 3.0
+  # デフォルトのPIVパラメータ
+  piv_kwargs = {
+      'winsize': 16,
+      'searchsize': 32,
+      'overlap': 12,
+      'sn_threshold': 1.3,
+      'std_threshold': 2.0
+  }
+  if piv_params:
+      piv_kwargs.update(piv_params)
+  print("Using PIV parameters:", piv_kwargs)
 
   # --- 2. 1stパス: 解析とデータ収集 ---
   print("--- Pass 1: Analyzing all individual pairs and finding max velocity ---")
@@ -95,17 +101,20 @@ def analyze_and_save_frames(video_path, output_dir, scaling_factor, vmax_overrid
     
     u, v, sig2noise = process.extended_search_area_piv(
       frame_a.astype(np.int32), frame_b.astype(np.int32),
-      window_size=winsize, overlap=overlap, dt=dt,
-      search_area_size=searchsize, sig2noise_method='peak2peak'
+      window_size=piv_kwargs['winsize'], 
+      overlap=piv_kwargs['overlap'], 
+      dt=dt,
+      search_area_size=piv_kwargs['searchsize'], 
+      sig2noise_method='peak2peak'
     )
 
     if x is None:
       x, y = process.get_coordinates(
-        image_size=frame_a.shape, search_area_size=searchsize, overlap=overlap
+        image_size=frame_a.shape, search_area_size=piv_kwargs['searchsize'], overlap=piv_kwargs['overlap']
       )
 
-    mask_sn = validation.sig2noise_val(sig2noise, threshold=sn_threshold)
-    mask_glob = validation.global_std(u, v, std_threshold=std_threshold)
+    mask_sn = validation.sig2noise_val(sig2noise, threshold=piv_kwargs['sn_threshold'])
+    mask_glob = validation.global_std(u, v, std_threshold=piv_kwargs['std_threshold'])
     invalid_mask = np.logical_or(mask_sn, mask_glob)
     
     u_filtered, v_filtered = filters.replace_outliers(
@@ -171,7 +180,7 @@ def analyze_and_save_frames(video_path, output_dir, scaling_factor, vmax_overrid
     _, _, agg_u_scaled, agg_v_scaled = scaling.uniform(x, y, aggregated_u_raw, aggregated_v_raw, scaling_factor=scaling_factor)
 
     fig, ax = plt.subplots(figsize=(12, 12))
-    ax.imshow(cv2.cvtColor(base_data["bg"], cv2.COLOR_BGR2RGB), alpha=0.8)
+    ax.imshow(cv2.cvtColor(base_data["bg"], cv2.COLOR_BGR2GRAY), cmap='gray', alpha=0.8)
     
     magnitude = np.sqrt(agg_u_scaled**2 + agg_v_scaled**2)
     
@@ -184,7 +193,7 @@ def analyze_and_save_frames(video_path, output_dir, scaling_factor, vmax_overrid
     quiver = ax.quiver(
       x_scaled, y_scaled, agg_u_nonan, -agg_v_nonan,
       magnitude_nonan,
-      cmap='viridis',
+      cmap='jet',
       scale=plot_scale,
       width=0.0035,
       headwidth=3,
